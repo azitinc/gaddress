@@ -22,6 +22,18 @@ module Gaddress
     BUILDING = 16
 
     class << self
+      # 最も詳細なタイプ
+      # @return [Integer]
+      def finest_type
+        BUILDING
+      end
+
+      # 最も曖昧なタイプ
+      # @return [Integer]
+      def least_type
+        POSTAL_CODE
+      end
+
       # Google APIからかえってくる文字列からの変換
       # @param [String] str GoogleのAPIからかえってきた文字列
       # @return [Integer]
