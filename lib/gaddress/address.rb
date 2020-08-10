@@ -15,8 +15,8 @@ module Gaddress
     end
 
     # 住所をフォーマットする
-    # @param [Integer] min_level 範囲をしぼる最も曖昧なAddressType
-    # @param [Integer] max_level 範囲をしぼる最も詳細なAddressType
+    # @param [Integer] min_type 範囲をしぼる最も曖昧なAddressType
+    # @param [Integer] max_type 範囲をしぼる最も詳細なAddressType
     # @param [String] delimiter 住所コンポーネントを結合する時に使う文字列
     # @return [String]
     def format_address(min_type: AddressType.least_type,
@@ -67,7 +67,6 @@ module Gaddress
     # Google APIから返ってくる事があるイレギュラーなcomponentを修正する
     # サポートしていない形式のAddress Componenが返ってくる事があるので除去
     # 市区町村と、その一つ下の階層に重複したデータがかえってくる事があるので削除
-    # @param [Array<Gaddress::AddressComponent>] raw_components
     def set_components
       components = supported_components
       if locality_component&.long_name == sublocality_level_1_component&.long_name

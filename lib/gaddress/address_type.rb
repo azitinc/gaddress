@@ -1,25 +1,41 @@
 # frozen_string_literal: true
 module Gaddress
-  # Google APIからかえってくる type の詳細度を表現する定数をまとめたモジュール
-  # 数字が大きいほど詳細
-  module AddressType
-    POSTAL_CODE = 0
-    COUNTRY = 1
-    ADMINI_L1 = 2
-    ADMINI_L2 = 3
-    ADMINI_L3 = 4
-    ADMINI_L4 = 5
-    ADMINI_L5 = 6
-    LOC = 7
-    WARD = 8
-    SUB_L1 = 9
-    SUB_L2 = 10
-    SUB_L3 = 11
-    SUB_L4 = 12
-    SUB_L5 = 13
-    PREMISE = 14
-    SUBPREMISE = 15
-    BUILDING = 16
+  # Google APIからかえってくる type
+  class AddressType
+    include Comparable
+
+    # @api private
+    def initialize(level)
+      @level = level
+    end
+
+    private_class_method :new
+
+    # 
+    # @!macro [attach] address_type
+    #   @!parse $1 = AddressType
+    def self.define_address_type(name, level)
+      const_set(name.upcase, new(level))
+    end
+    private_class_method :define_address_type
+
+    define_address_type "POSTAL_CODE", 0
+    define_address_type "COUNTRY", 1
+    define_address_type "ADMINI_L1", 2
+    define_address_type "ADMINI_L2", 3
+    define_address_type "ADMINI_L3", 4
+    define_address_type "ADMINI_L4", 5
+    define_address_type "ADMINI_L5", 6
+    define_address_type "LOC", 7
+    define_address_type "WARD", 8
+    define_address_type "SUB_L1", 9
+    define_address_type "SUB_L2", 10
+    define_address_type "SUB_L3", 11
+    define_address_type "SUB_L4", 12
+    define_address_type "SUB_L5", 13
+    define_address_type "PREMISE", 14
+    define_address_type "SUBPREMISE", 15
+    define_address_type "BUILDING", 16
 
     class << self
       # 最も詳細なタイプ
@@ -60,5 +76,13 @@ module Gaddress
         mapping[str.to_sym]
       end
     end
+
+    def <=>(other)
+      level - other.level
+    end
+
+    protected
+
+    attr_reader :level
   end
 end
