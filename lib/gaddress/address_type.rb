@@ -11,9 +11,8 @@ module Gaddress
 
     private_class_method :new
 
-    # 
     # @!macro [attach] address_type
-    #   @!parse $1 = AddressType
+    #   @!parse $1 = Gaddress::AddressType
     def self.define_address_type(name, level)
       const_set(name.upcase, new(level))
     end

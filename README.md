@@ -2,6 +2,47 @@
 
 Google APIから返ってくるアドレスを扱うライブラリ
 
+## Why?
+
+### Google API Address Components
+
+Google APIでは、いくつかのAPIから共通の属性を持つ住所情報がかえってきます.
+
+- [Google Place Details API](https://developers.google.com/places/web-service/details#PlaceDetailsResults)
+- [Google Reverse Geocoding API](https://developers.google.com/maps/documentation/geocoding/overview#ReverseGeocoding)
+
+```json
+[
+  {
+    "long_name" : "277",
+    "short_name" : "277",
+    "types" : [ "street_number" ]
+  },
+  {
+    "long_name" : "Bedford Avenue",
+    "short_name" : "Bedford Ave",
+    "types" : [ "route" ]
+  },
+  {
+    "long_name" : "Williamsburg",
+    "short_name" : "Williamsburg",
+    "types" : [ "neighborhood", "political" ]
+  },
+]
+```
+
+このレスポンスには、`types` というフィールドが含まれており、ここのそれぞれの値は
+
+https://developers.google.com/places/web-service/supported_types
+
+で示される値となっています。
+
+### 解決したい課題
+
+この `types` の値は階層を構造をもっており、また一方で階層に属さない意味をもつよな値も存在します。
+このライブラリはそれらから階層構造を持つもののみを抽出し、
+郵便番号からはじまり、段々と詳細化していく形式の日本式の住所表記に変換するのをサポートするライブラリです.
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -55,8 +96,8 @@ address = Gaddress::Address.new(
   ]
 )
 address.format_address(
-  min_type: Gaddress::AddressType.LOC,
-  max_type: Gaddress::Address.SUB_L1,
+  min_type: Gaddress::AddressType::LOC,
+  max_type: Gaddress::Address::SUB_L1,
   delimiter: '@'
 )
 => "渋谷区@1丁目"
